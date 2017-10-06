@@ -145,7 +145,7 @@ public class MedicineCalculator {
     }
 
     /**
-     *
+     * Calculate flow rate with Cockroft und Gault
      *
      * @param age in years
      * @param weight in kg
