@@ -3,6 +3,8 @@ package ch.robinglauser.bfhexercise.medhelp;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Objects;
@@ -33,23 +35,36 @@ public class MedicineCalculatorGUI extends JFrame {
     private void createForm(){
         String[] labels = {"Age in Years: ", "Weight in KG: ", "Serumkreatinin in mg/dl: "};
         for (String label : labels) {
-            JLabel l = new JLabel(label, JLabel.TRAILING);
-            add(l);
-            JTextField textField = new JTextField(10);
-            textField.setText("0");
-            l.setLabelFor(textField);
-            textField.setHorizontalAlignment(SwingConstants.RIGHT);
-            add(textField);
-            textField.getDocument().addDocumentListener(documentListener);
+            createField(label);
         }
         createGenderComboBox();
+        createOutputField();
+    }
 
+    private void createOutputField() {
         JLabel jPanel = new JLabel("Renal function");
         jPanel.setHorizontalAlignment(SwingConstants.RIGHT);
         add(jPanel);
         jLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         jLabel.setEditable(false);
         add(jLabel);
+    }
+
+    private void createField(String label) {
+        JLabel jLabel = new JLabel(label, JLabel.TRAILING);
+        add(jLabel);
+        final JTextField textField = new JTextField(10);
+        textField.setText("0");
+        jLabel.setLabelFor(textField);
+        textField.setHorizontalAlignment(SwingConstants.RIGHT);
+        add(textField);
+        textField.addFocusListener(new FocusListener() {
+            @Override public void focusLost(final FocusEvent pE) {}
+            @Override public void focusGained(final FocusEvent pE) {
+                textField.selectAll();
+            }
+        });
+        textField.getDocument().addDocumentListener(documentListener);
     }
 
     private void createGenderComboBox() {
@@ -76,13 +91,19 @@ public class MedicineCalculatorGUI extends JFrame {
     }
 
     private double getNumberFromJTextField(JTextField textField) {
-        return Double.parseDouble(Objects.equals(textField.getText(), "") ? "0" : textField.getText().replace(',', '.'));
+        String value = textField.getText().replaceAll(",", ".");
+        if (value.equals("")){
+            return 0;
+        }
+        if ((value.length() - value.replace(".", "").length()) > 1){
+            return 0;
+        }
+        return Double.parseDouble(value);
     }
 
     private MedicineCalculator.Gender getGender(JComboBox<String> jComboBox) {
         return (Objects.equals(jComboBox.getSelectedItem(), "Male")) ? MedicineCalculator.Gender.MAN : MedicineCalculator.Gender.WOMAN;
     }
-
 
     private class DocumentListener implements javax.swing.event.DocumentListener, ItemListener {
 

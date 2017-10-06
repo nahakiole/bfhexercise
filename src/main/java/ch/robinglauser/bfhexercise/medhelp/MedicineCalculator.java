@@ -153,7 +153,6 @@ public class MedicineCalculator {
      * @return flow rate of filtered fluid through the kidney.
      */
     public static double getRenalFunction(int age, double weight, double serumkreatinin, Gender gender){
-        System.out.println(gender);
         return ((140 - age) / serumkreatinin) * (weight / 72) * (gender == Gender.MAN ? 1 : 0.85);
     }
 
