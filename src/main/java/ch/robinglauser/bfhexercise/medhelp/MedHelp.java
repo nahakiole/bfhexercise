@@ -27,7 +27,7 @@ public class MedHelp extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         GridLayout experimentLayout = new GridLayout(5, 2);
         setLayout(experimentLayout);
-        setTitle("GFR Calculator");
+        setTitle("Renal Function Calculator");
         String[] labels = {"Age in Years: ", "Weight in KG: ", "Serumkreatinin in mg/dl: "};
         for (String label : labels) {
             JLabel l = new JLabel(label, JLabel.TRAILING);
@@ -48,6 +48,8 @@ public class MedHelp extends JFrame {
         textField.addItemListener(documentListener);
 
         JLabel jPanel = new JLabel("Renal function");
+        jPanel.setHorizontalAlignment(SwingConstants.RIGHT);
+
         add(jPanel);
         jLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         jLabel.setEditable(false);
