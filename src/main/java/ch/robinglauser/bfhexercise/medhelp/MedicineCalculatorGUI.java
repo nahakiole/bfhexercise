@@ -7,15 +7,19 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 public class MedicineCalculatorGUI extends JFrame {
 
     private JTextField jLabel = new JTextField();
     private JComboBox<String> genderComboBox;
     private DocumentListener documentListener;
+    ResourceBundle messages;
 
     public MedicineCalculatorGUI() {
+        initializeLanguage();
         initializeFrame();
         createForm();
         calculateChange();
@@ -27,13 +31,19 @@ public class MedicineCalculatorGUI extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         GridLayout experimentLayout = new GridLayout(5, 2);
         setLayout(experimentLayout);
-        setTitle("Renal Function Calculator");
+        setTitle(messages.getString("title"));
         setSize(400, 160);
         setResizable(false);
     }
 
+
+    private void initializeLanguage() {
+        Locale currentLocale = new Locale(System.getProperty("user.language"), System.getProperty("user.country"));
+        messages = ResourceBundle.getBundle("translation", currentLocale);
+    }
+
     private void createForm(){
-        String[] labels = {"Age in Years: ", "Weight in KG: ", "Serumkreatinin in mg/dl: "};
+        String[] labels = {messages.getString("age_in_years")+": ", messages.getString("weight_in_kg")+": ", messages.getString("serumkreatinin_in_mg_dl")+": "};
         for (String label : labels) {
             createField(label);
         }
@@ -42,7 +52,7 @@ public class MedicineCalculatorGUI extends JFrame {
     }
 
     private void createOutputField() {
-        JLabel jPanel = new JLabel("Renal function");
+        JLabel jPanel = new JLabel(messages.getString("renal_function"));
         jPanel.setHorizontalAlignment(SwingConstants.RIGHT);
         add(jPanel);
         jLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -68,9 +78,9 @@ public class MedicineCalculatorGUI extends JFrame {
     }
 
     private void createGenderComboBox() {
-        JLabel l = new JLabel("Gender: ", JLabel.TRAILING);
+        JLabel l = new JLabel(messages.getString("gender")+": ", JLabel.TRAILING);
         add(l);
-        String[] gender = {"Male", "Female"};
+        String[] gender = {messages.getString("male"), messages.getString("female")};
         genderComboBox = new JComboBox<>(gender);
         l.setLabelFor(genderComboBox);
         add(genderComboBox);
@@ -102,7 +112,7 @@ public class MedicineCalculatorGUI extends JFrame {
     }
 
     private MedicineCalculator.Gender getGender(JComboBox<String> jComboBox) {
-        return (Objects.equals(jComboBox.getSelectedItem(), "Male")) ? MedicineCalculator.Gender.MAN : MedicineCalculator.Gender.WOMAN;
+        return (Objects.equals(jComboBox.getSelectedItem(), messages.getString("male"))) ? MedicineCalculator.Gender.MAN : MedicineCalculator.Gender.WOMAN;
     }
 
     private class DocumentListener implements javax.swing.event.DocumentListener, ItemListener {
@@ -110,13 +120,11 @@ public class MedicineCalculatorGUI extends JFrame {
         @Override
         public void insertUpdate(DocumentEvent e) {
             calculateChange();
-
         }
 
         @Override
         public void removeUpdate(DocumentEvent e) {
             calculateChange();
-
         }
 
         @Override
