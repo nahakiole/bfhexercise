@@ -4,31 +4,63 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.util.Scanner;
+import java.util.Random;
 
 public class ClientHandler extends Thread {
 
-    BufferedReader reader;
-    PrintWriter writer;
+    private Socket socket;
+    private Player player;
 
-    public void run(){
-        Socket socket = null;
+    ClientHandler(Socket socket, Player player) {
+        this.player = player;
+        this.socket = socket;
+    }
+
+    @Override
+    public void run() {
         try {
-            socket = new Socket(InetAddress.getLocalHost().getHostName(), 8888);
-            reader = new BufferedReader
+            BufferedReader reader = new BufferedReader
                     (new InputStreamReader(socket.getInputStream()));
-            writer = new PrintWriter(socket.getOutputStream(), true);
-
-            String message = "";
-            while (!message.equals("quit")) {
-                System.out.println(reader.readLine());
-                Scanner scanner = new Scanner(System.in);
-                message = scanner.nextLine();
-                writer.println(message);
+            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+            writer.println("HELLO");
+            String name = reader.readLine().split(" ")[1];
+            this.player.setName(name);
+            System.out.println(player.getName() + " has connected");
+            while (!player.getGame().isReady()) {
+                Thread.sleep(10);
             }
-        } catch (IOException e) {
+            if (player.getGame().getPlayerOne() == player) {
+                player.getGame().start();
+                writer.println("START");
+            }
+            String line;
+            while (player.getGame().isRunning()) {
+                Thread.sleep(500);
+                if (player.getGame().getCurrentPlayer() == player) {
+                    Thread.sleep(500);
+                    if (player.getGame().getTurns() != 0) {
+                        int[] lastturn = player.getGame().getLastTurn();
+                        writer.println("MOV " + lastturn[0] + " " + lastturn[1]);
+                    }
+                    boolean hasPlayed = false;
+                    while (!hasPlayed) {
+                        try {
+                            line = reader.readLine();
+                            player.getGame().send(player, line);
+                            hasPlayed = true;
+                        } catch (Field.WrongMoveException e) {
+                            writer.println("WRONG");
+                        }
+                    }
+                    player.getGame().nextPlayer();
+                }
+            }
+            writer.println(player.getGame().getStatus(player));
+
+
+            socket.close();
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         } finally {
             try {

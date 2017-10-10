@@ -2,7 +2,6 @@ package ch.robinglauser.bfhexercise.tictactoe;
 
 public class Field {
 
-
     public static final int FREE = 0;
     public static final int O = 10;
     public static final int X = 100;
@@ -16,10 +15,6 @@ public class Field {
         else {
             throw new WrongMoveException();
         }
-    }
-
-    public int[][] getField() {
-        return field;
     }
 
     public boolean hasWon(int sign) {
@@ -62,10 +57,8 @@ public class Field {
                 System.out.print("|");
             }
             System.out.print("\n");
-
         }
     }
-
 
     public boolean fieldFull(){
         for (int i = 0; i < 3; i++) {

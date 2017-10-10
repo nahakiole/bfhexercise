@@ -8,9 +8,11 @@ import java.util.GregorianCalendar;
 /**
  * Assembly of methods to calculate body surface, body mass index, ideal weight, normal weight, birth date and age.
  */
-public class MedicineCalculator {
+public class BodyDataCalculatorBasic {
 
-
+    /**
+     * Enum to differentiate gender.
+     */
     public enum Gender {
         MAN, WOMAN, OTHER
     }
@@ -26,11 +28,11 @@ public class MedicineCalculator {
     public static double getBodySurface(double weight, double height, int age) {
         if (age > 17) {
             if (age < 22) {
-                return (getBodySurfaceAdult(weight, height) + getBodySurfaceChild(weight, height)) / 2;
+                return (getBSAadults(weight, height) + getBSAchildren(weight, height)) / 2;
             }
-            return getBodySurfaceAdult(weight, height);
+            return getBSAadults(weight, height);
         }
-        return getBodySurfaceChild(weight, height);
+        return getBSAchildren(weight, height);
     }
 
     /**
@@ -40,7 +42,7 @@ public class MedicineCalculator {
      * @param height in cm
      * @return bodysurface in m^2
      */
-    private static double getBodySurfaceAdult(double weight, double height) {
+    private static double getBSAadults(double weight, double height) {
         return (Math.pow(weight, 0.425) * Math.pow(height, 0.725) * 71.84) / 10000;
     }
 
@@ -51,7 +53,18 @@ public class MedicineCalculator {
      * @param height in cm
      * @return bodysurface in m^2
      */
-    private static double getBodySurfaceChild(double weight, double height) {
+    private static double getBSAyoungAdults(double weight, double height) {
+        return (getBSAadults(weight, height) + getBSAchildren(weight, height)) / 2;
+    }
+
+    /**
+     * Get body surface for a young adult (age 17-22)
+     *
+     * @param weight in kg
+     * @param height in cm
+     * @return bodysurface in m^2
+     */
+    private static double getBSAchildren(double weight, double height) {
         return (weight * height) / 3600;
     }
 
@@ -60,9 +73,9 @@ public class MedicineCalculator {
      *
      * @param weight in kg
      * @param height in cm
-     * @return
+     * @return body mass index
      */
-    public static double getBodyMassIndex(double weight, double height) {
+    public static double getBMI(double weight, double height) {
         return weight / Math.pow(height / 100, 2);
     }
 
@@ -81,14 +94,34 @@ public class MedicineCalculator {
     }
 
     /**
+     * Get the ideal weight for men based on height
+     *
+     * @param height in cm
+     * @return ideal weight for men based on height
+     */
+    public static double getIBWmen(double height) {
+        return getIdealWeight(height, Gender.MAN);
+    }
+
+
+    /**
+     * Get the ideal weight for women based on height
+     *
+     * @param height in cm
+     * @return ideal weight for women based on height
+     */
+    public static double getIBWwomen(double height) {
+        return getIdealWeight(height, Gender.WOMAN);
+    }
+
+    /**
      * Get the normal weight in kg from the height.
      *
      * @param height in cm
      * @return normal weight
      */
-    public static double getNormalWeight(double height) {
+    public static double getNBW(double height) {
         return (height - 100);
-
     }
 
     /**
@@ -113,20 +146,6 @@ public class MedicineCalculator {
     }
 
     /**
-     * Get birthdate from last period with the Naegele Method
-     *
-     * @param lastPeriod Date of last period
-     * @return birthdate
-     */
-    public static GregorianCalendar getBirthDateWithNaegeleMethod(GregorianCalendar lastPeriod) {
-        GregorianCalendar birthdate = (GregorianCalendar) lastPeriod.clone();
-        birthdate.add(Calendar.DAY_OF_YEAR, 7);
-        birthdate.add(Calendar.MONTH, -3);
-        birthdate.add(Calendar.YEAR, 1);
-        return birthdate;
-    }
-
-    /**
      * Get birthdate from last period.
      *
      * @param birthday Date of birth
@@ -147,12 +166,12 @@ public class MedicineCalculator {
     /**
      * Calculate flow rate with Cockroft und Gault
      *
-     * @param age in years
-     * @param weight in kg
+     * @param age            in years
+     * @param weight         in kg
      * @param serumkreatinin in mg/dl
      * @return flow rate of filtered fluid through the kidney.
      */
-    public static double getRenalFunction(int age, double weight, double serumkreatinin, Gender gender){
+    public static double getRenalFunction(int age, double weight, double serumkreatinin, Gender gender) {
         return ((140 - age) / serumkreatinin) * (weight / 72) * (gender == Gender.MAN ? 1 : 0.85);
     }
 

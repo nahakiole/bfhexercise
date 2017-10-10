@@ -8,12 +8,11 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class JavaClient {
+public class TicTacToeClient {
 
     public static void main(String[] args) {
 
         ClientGUI clientGUI = new ClientGUI();
-
 
     }
 }

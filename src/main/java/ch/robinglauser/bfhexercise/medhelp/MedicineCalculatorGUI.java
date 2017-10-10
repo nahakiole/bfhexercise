@@ -42,8 +42,8 @@ public class MedicineCalculatorGUI extends JFrame {
         messages = ResourceBundle.getBundle("translation", currentLocale);
     }
 
-    private void createForm(){
-        String[] labels = {messages.getString("age_in_years")+": ", messages.getString("weight_in_kg")+": ", messages.getString("serumkreatinin_in_mg_dl")+": "};
+    private void createForm() {
+        String[] labels = {messages.getString("age_in_years") + ": ", messages.getString("weight_in_kg") + ": ", messages.getString("serumkreatinin_in_mg_dl") + ": "};
         for (String label : labels) {
             createField(label);
         }
@@ -69,8 +69,12 @@ public class MedicineCalculatorGUI extends JFrame {
         textField.setHorizontalAlignment(SwingConstants.RIGHT);
         add(textField);
         textField.addFocusListener(new FocusListener() {
-            @Override public void focusLost(final FocusEvent pE) {}
-            @Override public void focusGained(final FocusEvent pE) {
+            @Override
+            public void focusLost(final FocusEvent pE) {
+            }
+
+            @Override
+            public void focusGained(final FocusEvent pE) {
                 textField.selectAll();
             }
         });
@@ -78,7 +82,7 @@ public class MedicineCalculatorGUI extends JFrame {
     }
 
     private void createGenderComboBox() {
-        JLabel l = new JLabel(messages.getString("gender")+": ", JLabel.TRAILING);
+        JLabel l = new JLabel(messages.getString("gender") + ": ", JLabel.TRAILING);
         add(l);
         String[] gender = {messages.getString("male"), messages.getString("female")};
         genderComboBox = new JComboBox<>(gender);
@@ -91,28 +95,28 @@ public class MedicineCalculatorGUI extends JFrame {
         JTextField age = (JTextField) this.getContentPane().getComponent(1);
         JTextField weight = (JTextField) this.getContentPane().getComponent(3);
         JTextField serumkreatinin = (JTextField) this.getContentPane().getComponent(5);
-        MedicineCalculator.Gender gender = getGender(genderComboBox);
+        BodyDataCalculatorBasic.Gender gender = getGender(genderComboBox);
         int ageasint = (int) getNumberFromJTextField(age);
         double weightasdouble = getNumberFromJTextField(weight);
         double serumkreatininasdouble = getNumberFromJTextField(serumkreatinin);
-        double gfr = MedicineCalculator.getRenalFunction(ageasint, weightasdouble, serumkreatininasdouble, gender);
+        double gfr = BodyDataCalculatorBasic.getRenalFunction(ageasint, weightasdouble, serumkreatininasdouble, gender);
         jLabel.setText("" + String.valueOf((double) Math.round(gfr * 1000d) / 1000d));
 
     }
 
     private double getNumberFromJTextField(JTextField textField) {
         String value = textField.getText().replaceAll(",", ".");
-        if (value.equals("")){
+        if (value.equals("")) {
             return 0;
         }
-        if ((value.length() - value.replace(".", "").length()) > 1){
+        if ((value.length() - value.replace(".", "").length()) > 1) {
             return 0;
         }
         return Double.parseDouble(value);
     }
 
-    private MedicineCalculator.Gender getGender(JComboBox<String> jComboBox) {
-        return (Objects.equals(jComboBox.getSelectedItem(), messages.getString("male"))) ? MedicineCalculator.Gender.MAN : MedicineCalculator.Gender.WOMAN;
+    private BodyDataCalculatorBasic.Gender getGender(JComboBox<String> jComboBox) {
+        return (Objects.equals(jComboBox.getSelectedItem(), messages.getString("male"))) ? BodyDataCalculatorBasic.Gender.MAN : BodyDataCalculatorBasic.Gender.WOMAN;
     }
 
     private class DocumentListener implements javax.swing.event.DocumentListener, ItemListener {
