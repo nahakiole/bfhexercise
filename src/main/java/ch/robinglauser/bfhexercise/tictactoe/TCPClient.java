@@ -1,39 +1,70 @@
 package ch.robinglauser.bfhexercise.tictactoe;
 
 import java.io.*;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class TCPClient extends Thread {
 
 
+    private final ClientGUI cg;
     PrintStream ps;
     BufferedReader buff;
     private boolean ready = false;
+
+    public TCPClient(ClientGUI clientGUI) {
+        this.cg = clientGUI;
+    }
 
     public void run() {
         Socket socket = null;
         try {
             socket = new Socket("127.0.0.1", 8888);
-
             OutputStream raus = socket.getOutputStream();
-            PrintStream ps = new PrintStream(raus, true);
+            ps = new PrintStream(raus, true);
             InputStream rein = socket.getInputStream();
             buff = new BufferedReader(new InputStreamReader(rein));
             ready = true;
+            cg.setStatus("Waiting");
+            while (true) {
+                String line = buff.readLine();
+                System.out.println(line);
+                String command = line.split(" ")[0];
+                switch (command){
+                    case "START":
+                        cg.setStatus("Start");
+                        break;
+                    case "WRONG":
+                        cg.setStatus("Wrong Move");
+                        break;
+                    case "MOV":
+                        cg.setStatus("Your Move");
+                        try {
+                            int[] coordinates = Field.parseSet(line);
+                            cg.setField(coordinates[0], coordinates[1], 'O');
+                        } catch (WrongMoveException e) {
+                            System.out.println("Bad Server");
+                            e.printStackTrace();
+                        }
+                        break;
+                    case "WIN":
+                    case "LOSE":
+                    case "DRAW":
+                        cg.setStatus(command);
+                        break;
+                }
 
-            while (buff.ready()) {
-                System.out.println(buff.readLine());
             }
-
         } catch (UnknownHostException e) {
             System.out.println("Unknown Host...");
             e.printStackTrace();
         } catch (IOException e) {
+            System.exit(1);
             System.out.println("IOProbleme...");
             e.printStackTrace();
         } finally {
-            if (socket != null)
+            if (socket != null){
                 try {
                     socket.close();
                     System.out.println("Socket geschlossen...");
@@ -41,17 +72,19 @@ public class TCPClient extends Thread {
                     System.out.println("Socket nicht zu schliessen...");
                     e.printStackTrace();
                 }
+            }
+
         }
     }
 
-    public void sendName(String name){
-        ps.println("NAME "+name);
+    public void sendName(String name) {
+        ps.println("NAME " + name);
     }
 
-    public void sendMove(int x, int y){
-        ps.println("SET "+x+" "+y);
+    public void sendMove(int x, int y) {
+        ps.println("SET " + x + " " + y);
+        cg.setStatus("Waiting");
     }
-
 
     public boolean isReady() {
         return ready;

@@ -4,7 +4,7 @@ import org.junit.Test;
 
 public class FieldTest {
     @Test
-    public void hasWon() throws Exception, Field.WrongMoveException {
+    public void hasWon() throws Exception, WrongMoveException {
         Field field = new Field();
         field.setField(Field.X, 0,0);
         field.setField(Field.X, 0,1);

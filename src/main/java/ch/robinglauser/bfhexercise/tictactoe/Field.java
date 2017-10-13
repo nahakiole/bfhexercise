@@ -26,7 +26,8 @@ public class Field {
         return field[0][0] + field[1][1] + field[2][2] == sign * 3 || field[0][2] + field[1][1] + field[2][0] == sign * 3;
     }
 
-    public int[] parseSet(String set) throws WrongMoveException {
+    public static int[] parseSet(String set) throws WrongMoveException {
+        System.out.println(set);
         int[] point = new int[2];
         String[] parsed = (set.split(" "));
         if (parsed.length != 3){
@@ -71,5 +72,5 @@ public class Field {
         return true;
     }
 
-    public class WrongMoveException extends Throwable { }
 }
+

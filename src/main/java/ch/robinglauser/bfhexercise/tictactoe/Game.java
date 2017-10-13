@@ -78,9 +78,9 @@ public class Game extends Thread {
         return running;
     }
 
-    public void send(Player player, String msg) throws Field.WrongMoveException {
+    public void send(Player player, String msg) throws WrongMoveException {
         if (player == currentPlayer) {
-            int[] coordinates = this.field.parseSet(msg);
+            int[] coordinates = Field.parseSet(msg);
             this.field.setField((currentPlayer == playerOne ? Field.X : Field.O), coordinates[0], coordinates[1]);
             turns.add(coordinates);
         }

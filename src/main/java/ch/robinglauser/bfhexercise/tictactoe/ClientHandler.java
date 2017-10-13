@@ -31,6 +31,7 @@ public class ClientHandler extends Thread {
                 Thread.sleep(10);
             }
             if (player.getGame().getPlayerOne() == player) {
+                System.out.println("START");
                 player.getGame().start();
                 writer.println("START");
             }
@@ -49,7 +50,7 @@ public class ClientHandler extends Thread {
                             line = reader.readLine();
                             player.getGame().send(player, line);
                             hasPlayed = true;
-                        } catch (Field.WrongMoveException e) {
+                        } catch (WrongMoveException e) {
                             writer.println("WRONG");
                         }
                     }
