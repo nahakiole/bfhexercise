@@ -29,6 +29,9 @@ public class Field {
     public static int[] parseSet(String set) throws WrongMoveException {
         System.out.println(set);
         int[] point = new int[2];
+        if (set == null){
+            throw new WrongMoveException();
+        }
         String[] parsed = (set.split(" "));
         if (parsed.length != 3){
             throw new WrongMoveException();

@@ -54,7 +54,7 @@ public class ClientGUI extends JFrame {
                     System.out.println("Clicked");
                     JButton source = (JButton) e.getSource();
                     if (source.getText().equals(" ")) {
-                        source.setText("X");
+                        source.setText(isX ? "X" : "O");
                         System.out.println((finalI) / 3);
                         System.out.println((finalI) % 3);
                         tcpClient.sendMove((finalI) / 3, (finalI) % 3);

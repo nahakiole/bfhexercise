@@ -27,12 +27,14 @@ public class TCPClient extends Thread {
             buff = new BufferedReader(new InputStreamReader(rein));
             ready = true;
             cg.setStatus("Waiting");
-            while (true) {
+            boolean running = true;
+            while (running) {
                 String line = buff.readLine();
                 System.out.println(line);
                 String command = line.split(" ")[0];
                 switch (command){
                     case "START":
+                        cg.isX = true;
                         cg.setStatus("Start");
                         break;
                     case "WRONG":
@@ -42,7 +44,7 @@ public class TCPClient extends Thread {
                         cg.setStatus("Your Move");
                         try {
                             int[] coordinates = Field.parseSet(line);
-                            cg.setField(coordinates[0], coordinates[1], 'O');
+                            cg.setField(coordinates[0], coordinates[1], !cg.isX ? 'X' : 'O');
                         } catch (WrongMoveException e) {
                             System.out.println("Bad Server");
                             e.printStackTrace();
@@ -52,6 +54,7 @@ public class TCPClient extends Thread {
                     case "LOSE":
                     case "DRAW":
                         cg.setStatus(command);
+                        running = false;
                         break;
                 }
 
