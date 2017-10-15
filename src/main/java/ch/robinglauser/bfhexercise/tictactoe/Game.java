@@ -61,7 +61,7 @@ public class Game extends Thread {
         System.out.println(playerOne.getName()+" - vs - "+playerTwo.getName());
         field.printField();
         System.out.println("-------------------------");
-        while (running) {
+        while (isRunning()) {
 
         }
     }

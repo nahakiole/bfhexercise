@@ -30,7 +30,6 @@ public class TCPClient extends Thread {
             boolean running = true;
             while (running) {
                 String line = buff.readLine();
-                System.out.println(line);
                 String command = line.split(" ")[0];
                 switch (command){
                     case "START":
@@ -60,19 +59,15 @@ public class TCPClient extends Thread {
 
             }
         } catch (UnknownHostException e) {
-            System.out.println("Unknown Host...");
             e.printStackTrace();
         } catch (IOException e) {
             System.exit(1);
-            System.out.println("IOProbleme...");
             e.printStackTrace();
         } finally {
             if (socket != null){
                 try {
                     socket.close();
-                    System.out.println("Socket geschlossen...");
                 } catch (IOException e) {
-                    System.out.println("Socket nicht zu schliessen...");
                     e.printStackTrace();
                 }
             }

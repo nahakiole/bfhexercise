@@ -31,7 +31,6 @@ public class ClientHandler extends Thread {
                 Thread.sleep(10);
             }
             if (player.getGame().getPlayerOne() == player) {
-                System.out.println("START");
                 player.getGame().start();
                 writer.println("START");
             }
