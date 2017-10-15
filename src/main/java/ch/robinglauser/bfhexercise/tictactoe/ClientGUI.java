@@ -10,6 +10,7 @@ public class ClientGUI extends JFrame {
     private JButton[] buttons = new JButton[9];
     private TCPClient tcpClient = new TCPClient(this);
     private JLabel status = new JLabel();
+    private JLabel otherplayer = new JLabel();
     public boolean isX = false;
 
     public ClientGUI() throws HeadlessException {
@@ -22,12 +23,13 @@ public class ClientGUI extends JFrame {
         setVisible(true);
         status.setText("Connecting");
         tcpClient.start();
-        while (!tcpClient.isReady()) { }
+        while (!tcpClient.isReady()) {
+        }
         tcpClient.sendName(getName());
     }
 
-    public String getName(){
-        String s = (String)JOptionPane.showInputDialog(
+    public String getName() {
+        String s = (String) JOptionPane.showInputDialog(
                 this,
                 "Enter name",
                 "Enter name",
@@ -48,6 +50,10 @@ public class ClientGUI extends JFrame {
 
     public void setStatus(String statustxt) {
         status.setText(statustxt);
+    }
+
+    public void setPlayer(String playername) {
+        otherplayer.setText(playername);
     }
 
     public void initGame() {
@@ -73,6 +79,7 @@ public class ClientGUI extends JFrame {
             i++;
         }
         add(status);
+        add(otherplayer);
         pack();
         setSize(200, 200);
     }

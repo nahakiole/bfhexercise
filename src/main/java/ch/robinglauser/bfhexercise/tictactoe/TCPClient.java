@@ -39,6 +39,9 @@ public class TCPClient extends Thread {
                     case "WRONG":
                         cg.setStatus("Wrong Move");
                         break;
+                    case "PLAYER":
+                        cg.setPlayer(line.split(" ")[1]);
+                        break;
                     case "MOV":
                         cg.setStatus("Your Move");
                         try {

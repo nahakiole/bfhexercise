@@ -32,7 +32,11 @@ public class ClientHandler extends Thread {
             }
             if (player.getGame().getPlayerOne() == player) {
                 player.getGame().start();
+                writer.println("PLAYER "+player.getGame().getPlayerTwo().getGame());
                 writer.println("START");
+            }
+            else {
+                writer.println("PLAYER "+player.getGame().getPlayerOne().getGame());
             }
             String line;
             while (player.getGame().isRunning()) {
