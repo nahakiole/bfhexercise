@@ -22,17 +22,26 @@ public class ClientGUI extends JFrame {
         setVisible(true);
         status.setText("Connecting");
         tcpClient.start();
-        while (!tcpClient.isReady()) {
+        while (!tcpClient.isReady()) { }
+        tcpClient.sendName(getName());
+    }
 
+    public String getName(){
+        String s = (String)JOptionPane.showInputDialog(
+                this,
+                "Enter name",
+                "Enter name",
+                JOptionPane.PLAIN_MESSAGE);
+
+        if ((s != null) && (s.length() > 0)) {
+            return s;
         }
-        tcpClient.sendName("Robin");
+
+        return getName();
     }
 
     public void setField(int x, int y, char cell) {
         int button = (x * 3 + y);
-        System.out.println(button);
-        System.out.println(buttons.length);
-        System.out.println(buttons[button]);
         buttons[button].setText(String.valueOf(cell));
     }
 
@@ -51,7 +60,6 @@ public class ClientGUI extends JFrame {
             aButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("Clicked");
                     JButton source = (JButton) e.getSource();
                     if (source.getText().equals(" ")) {
                         source.setText(isX ? "X" : "O");
