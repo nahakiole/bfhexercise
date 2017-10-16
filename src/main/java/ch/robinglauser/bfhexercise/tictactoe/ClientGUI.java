@@ -23,24 +23,25 @@ public class ClientGUI extends JFrame {
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         setVisible(true);
         status.setText("Connecting");
+        tcpClient.setIp(getValue("Enter Server IP", "Enter Server IP", "127.0.0.1"));
         tcpClient.start();
         while (!tcpClient.isReady()) {
         }
-        tcpClient.sendName(getName());
+        tcpClient.sendName(getValue("Enter name", "Enter Name", System.getProperty("user.name")));
     }
 
-    public String getName() {
+    public String getValue(String message, String title, String defaultValue) {
         String s = (String) JOptionPane.showInputDialog(
                 this,
-                "Enter name",
-                "Enter name",
+                message,
+                title,
                 JOptionPane.PLAIN_MESSAGE);
 
         if ((s != null) && (s.length() > 0)) {
             return s;
         }
 
-        return getName();
+        return defaultValue;
     }
 
     public void setField(int x, int y, char cell) {

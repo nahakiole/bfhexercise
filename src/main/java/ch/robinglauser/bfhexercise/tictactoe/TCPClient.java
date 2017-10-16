@@ -11,6 +11,7 @@ public class TCPClient extends Thread {
     PrintStream ps;
     BufferedReader buff;
     private boolean ready = false;
+    private String ip;
 
     public TCPClient(ClientGUI clientGUI) {
         this.cg = clientGUI;
@@ -19,7 +20,7 @@ public class TCPClient extends Thread {
     public void run() {
         Socket socket = null;
         try {
-            socket = new Socket("127.0.0.1", 8888);
+            socket = new Socket(ip, 8888);
             OutputStream raus = socket.getOutputStream();
             ps = new PrintStream(raus, true);
             InputStream rein = socket.getInputStream();
@@ -92,6 +93,10 @@ public class TCPClient extends Thread {
 
     public boolean isReady() {
         return ready;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 }
 
