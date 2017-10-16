@@ -66,6 +66,10 @@ public class Game extends Thread {
         }
     }
 
+    public void stopGame(){
+        running = false;
+    }
+
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
@@ -77,6 +81,8 @@ public class Game extends Thread {
         }
         return running;
     }
+
+
 
     public void send(Player player, String msg) throws WrongMoveException {
         if (player == currentPlayer) {

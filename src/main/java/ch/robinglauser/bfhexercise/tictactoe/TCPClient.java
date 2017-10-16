@@ -1,7 +1,6 @@
 package ch.robinglauser.bfhexercise.tictactoe;
 
 import java.io.*;
-import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -33,10 +32,12 @@ public class TCPClient extends Thread {
                 String command = line.split(" ")[0];
                 switch (command){
                     case "START":
+                        cg.waiting = false;
                         cg.isX = true;
                         cg.setStatus("Start");
                         break;
                     case "WRONG":
+                        cg.waiting = false;
                         cg.setStatus("Wrong Move");
                         break;
                     case "PLAYER":
@@ -44,6 +45,7 @@ public class TCPClient extends Thread {
                         break;
                     case "MOV":
                         cg.setStatus("Your Move");
+                        cg.waiting = false;
                         try {
                             int[] coordinates = Field.parseSet(line);
                             cg.setField(coordinates[0], coordinates[1], !cg.isX ? 'X' : 'O');
@@ -55,6 +57,7 @@ public class TCPClient extends Thread {
                     case "WIN":
                     case "LOSE":
                     case "DRAW":
+                        cg.waiting = true;
                         cg.setStatus(command);
                         running = false;
                         break;

@@ -12,14 +12,15 @@ public class ClientGUI extends JFrame {
     private JLabel status = new JLabel();
     private JLabel otherplayer = new JLabel();
     public boolean isX = false;
+    public boolean waiting = true;
 
     public ClientGUI() throws HeadlessException {
         GridLayout experimentLayout = new GridLayout(4, 3);
         this.setLayout(experimentLayout);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        initGame();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
-        initGame();
         setVisible(true);
         status.setText("Connecting");
         tcpClient.start();
@@ -53,7 +54,7 @@ public class ClientGUI extends JFrame {
     }
 
     public void setPlayer(String playername) {
-        otherplayer.setText(playername);
+        otherplayer.setText("You vs " + playername);
     }
 
     public void initGame() {
@@ -67,10 +68,8 @@ public class ClientGUI extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     JButton source = (JButton) e.getSource();
-                    if (source.getText().equals(" ")) {
+                    if (source.getText().equals(" ") && !waiting) {
                         source.setText(isX ? "X" : "O");
-                        System.out.println((finalI) / 3);
-                        System.out.println((finalI) % 3);
                         tcpClient.sendMove((finalI) / 3, (finalI) % 3);
                     }
                 }
@@ -81,7 +80,7 @@ public class ClientGUI extends JFrame {
         add(status);
         add(otherplayer);
         pack();
-        setSize(200, 200);
+        setSize(300, 300);
     }
 
 }

@@ -19,6 +19,7 @@ public class ClientHandler extends Thread {
 
     @Override
     public void run() {
+        Game game = null;
         try {
             BufferedReader reader = new BufferedReader
                     (new InputStreamReader(socket.getInputStream()));
@@ -27,28 +28,29 @@ public class ClientHandler extends Thread {
             String name = reader.readLine().split(" ")[1];
             this.player.setName(name);
             System.out.println(player.getName() + " has connected");
+            game = player.getGame();
             while (!player.getGame().isReady()) {
                 Thread.sleep(10);
             }
             if (player.getGame().getPlayerOne() == player) {
                 player.getGame().start();
-                writer.println("PLAYER "+player.getGame().getPlayerTwo().getGame());
+                writer.println("PLAYER "+player.getGame().getPlayerTwo().getName());
                 writer.println("START");
             }
             else {
-                writer.println("PLAYER "+player.getGame().getPlayerOne().getGame());
+                writer.println("PLAYER "+player.getGame().getPlayerOne().getName());
             }
             String line;
             while (player.getGame().isRunning()) {
-                Thread.sleep(500);
+                Thread.sleep(10);
                 if (player.getGame().getCurrentPlayer() == player) {
-                    Thread.sleep(500);
+                    Thread.sleep(10);
                     if (player.getGame().getTurns() != 0) {
                         int[] lastturn = player.getGame().getLastTurn();
                         writer.println("MOV " + lastturn[0] + " " + lastturn[1]);
                     }
                     boolean hasPlayed = false;
-                    while (!hasPlayed) {
+                    while (!hasPlayed && player.getGame().isRunning()) {
                         try {
                             line = reader.readLine();
                             player.getGame().send(player, line);
@@ -62,12 +64,14 @@ public class ClientHandler extends Thread {
             }
             writer.println(player.getGame().getStatus(player));
 
-
             socket.close();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         } finally {
             try {
+                if (game != null) {
+                    game.stopGame();
+                }
                 socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
