@@ -1,5 +1,6 @@
 package ch.robinglauser.bfhexercise.tictactoe;
 
+import java.util.Iterator;
 import java.util.Vector;
 
 public class TicTacToe {
@@ -8,8 +9,9 @@ public class TicTacToe {
 
     public synchronized void addPlayer(Player player) {
         //Remove old games
-        for (Game game : games) {
-            if (!game.isRunning()){
+        for (Iterator<Game> iterator = games.iterator(); iterator.hasNext(); ) {
+            Game game = iterator.next();
+            if (!game.isRunning()) {
                 games.remove(game);
             }
         }
@@ -24,5 +26,4 @@ public class TicTacToe {
             player.setGame(game);
         }
     }
-
 }
