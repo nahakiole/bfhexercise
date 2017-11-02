@@ -21,6 +21,7 @@ public class InputHandler implements KeyListener {
     }
 
     public void keyPressed(KeyEvent e) {
+        System.out.println(e.getKeyCode());
         for (Iterator<KeyListener> iterator = keyListeners.iterator(); iterator.hasNext(); ) {
             iterator.next().keyPressed(e);
         }

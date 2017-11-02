@@ -15,6 +15,7 @@ public class Screen extends JPanel {
         super.paintComponent(g);
         for (Iterator<Drawable> iterator = elements.iterator(); iterator.hasNext(); ) {
             Drawable element = iterator.next();
+            g.setColor(Color.BLACK);
             element.draw(g);
         }
     }
