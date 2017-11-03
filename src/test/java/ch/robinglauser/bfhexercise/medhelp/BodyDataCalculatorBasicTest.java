@@ -9,6 +9,24 @@ import org.junit.Test;
 
 public class BodyDataCalculatorBasicTest {
 
+
+    @Test
+    public void getBloodPressureCategory() throws Exception {
+        Assert.assertEquals(BodyDataCalculatorBasic.BloodPressureCategory.Hypotension, BodyDataCalculatorBasic.getBloodPressureCategory(89,59));
+        Assert.assertEquals(BodyDataCalculatorBasic.BloodPressureCategory.Desired, BodyDataCalculatorBasic.getBloodPressureCategory(89,60));
+        Assert.assertEquals(BodyDataCalculatorBasic.BloodPressureCategory.Desired, BodyDataCalculatorBasic.getBloodPressureCategory(90,59));
+        Assert.assertEquals(BodyDataCalculatorBasic.BloodPressureCategory.Desired, BodyDataCalculatorBasic.getBloodPressureCategory(119,79));
+        Assert.assertEquals(BodyDataCalculatorBasic.BloodPressureCategory.Prehypertension, BodyDataCalculatorBasic.getBloodPressureCategory(119,80));
+    }
+
+    @Test
+    public void getBodyMassIndexCategory() throws Exception {
+        Assert.assertEquals(BodyDataCalculatorBasic.BodyMassIndexCategory.Normal, BodyDataCalculatorBasic.getBodyMassIndexCategory(20));
+        Assert.assertEquals(BodyDataCalculatorBasic.BodyMassIndexCategory.VerySeverelyUnderweight, BodyDataCalculatorBasic.getBodyMassIndexCategory(10));
+        Assert.assertEquals(BodyDataCalculatorBasic.BodyMassIndexCategory.Overweight, BodyDataCalculatorBasic.getBodyMassIndexCategory(26));
+        Assert.assertEquals(BodyDataCalculatorBasic.BodyMassIndexCategory.SeverelyUnderweight, BodyDataCalculatorBasic.getBodyMassIndexCategory(15));
+    }
+
     @Test
     public void getGFT() throws Exception {
         Assert.assertEquals(44.6, BodyDataCalculatorBasic.getRenalFunction(30,70, 2.4, BodyDataCalculatorBasic.Gender.MAN), 0.1);

@@ -18,6 +18,30 @@ public class BodyDataCalculatorBasic {
     }
 
     /**
+     * Enum for different BloodPressureCategories
+     */
+    public enum BloodPressureCategory {
+        Hypotension,
+        Desired,
+        Prehypertension,
+        Stage1Hypertension,
+        Stage2Hypertension,
+        HypertensiveUrgency,
+        IsolatedSystolicHypertension
+    }
+
+    public enum BodyMassIndexCategory {
+        VerySeverelyUnderweight,
+        SeverelyUnderweight,
+        Underweight,
+        Normal,
+        Overweight,
+        ObeseClassI,
+        ObeseClassII,
+        ObeseClassIII
+    }
+
+    /**
      * Get the body surface from the weight, height and age of a person.
      *
      * @param weight in kg
@@ -175,5 +199,64 @@ public class BodyDataCalculatorBasic {
         return ((140 - age) / serumkreatinin) * (weight / 72) * (gender == Gender.MAN ? 1 : 0.85);
     }
 
+    /**
+     * @param systolic
+     * @param diastolic
+     * @return
+     */
+    public static BloodPressureCategory getBloodPressureCategory(int systolic, int diastolic) {
+        if (systolic < 90 && diastolic < 60) {
+            return BloodPressureCategory.Hypotension;
+        }
+        if (systolic < 120 && diastolic < 80) {
+            return BloodPressureCategory.Desired;
+        }
+        if (systolic < 139 && diastolic < 90) {
+            return BloodPressureCategory.Prehypertension;
+        }
+        if (systolic < 159 && diastolic < 100) {
+            return BloodPressureCategory.Stage1Hypertension;
+        }
+        if (systolic < 179 && diastolic < 110) {
+            return BloodPressureCategory.Stage2Hypertension;
+        }
+        if (systolic >= 180 && diastolic >= 110) {
+            return BloodPressureCategory.HypertensiveUrgency;
+        }
+        if (systolic >= 160 && diastolic < 90) {
+            return BloodPressureCategory.IsolatedSystolicHypertension;
+        }
+        throw new IllegalArgumentException("This doesn't make sense.");
+    }
 
+    /**
+     * Get the bodymass index category
+     *
+     * @param bodyMassIndex BMI as a double
+     * @return bodymass index Category
+     */
+    public static BodyMassIndexCategory getBodyMassIndexCategory(double bodyMassIndex) {
+        if (bodyMassIndex < 15) {
+            return BodyMassIndexCategory.VerySeverelyUnderweight;
+        }
+        if (bodyMassIndex < 16) {
+            return BodyMassIndexCategory.SeverelyUnderweight;
+        }
+        if (bodyMassIndex < 18.5) {
+            return BodyMassIndexCategory.Underweight;
+        }
+        if (bodyMassIndex < 25) {
+            return BodyMassIndexCategory.Normal;
+        }
+        if (bodyMassIndex < 30) {
+            return BodyMassIndexCategory.Overweight;
+        }
+        if (bodyMassIndex < 35) {
+            return BodyMassIndexCategory.ObeseClassI;
+        }
+        if (bodyMassIndex < 40) {
+            return BodyMassIndexCategory.ObeseClassII;
+        }
+        return BodyMassIndexCategory.ObeseClassIII;
+    }
 }
