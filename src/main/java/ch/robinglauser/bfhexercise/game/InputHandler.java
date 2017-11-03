@@ -1,11 +1,13 @@
 package ch.robinglauser.bfhexercise.game;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.security.Key;
 import java.util.Iterator;
 import java.util.Vector;
 
-public class InputHandler implements KeyListener {
+public class InputHandler implements KeyEventPostProcessor {
 
     private Vector<KeyListener> keyListeners = new Vector<>();
 
@@ -13,25 +15,21 @@ public class InputHandler implements KeyListener {
         keyListeners.add(keyListener);
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-        for (Iterator<KeyListener> iterator = keyListeners.iterator(); iterator.hasNext(); ) {
-            iterator.next().keyTyped(e);
-        }
-    }
-
-    public void keyPressed(KeyEvent e) {
-        System.out.println(e.getKeyCode());
-        for (Iterator<KeyListener> iterator = keyListeners.iterator(); iterator.hasNext(); ) {
-            iterator.next().keyPressed(e);
-        }
-
-    }
 
     @Override
-    public void keyReleased(KeyEvent e) {
+    public boolean postProcessKeyEvent(KeyEvent e) {
         for (Iterator<KeyListener> iterator = keyListeners.iterator(); iterator.hasNext(); ) {
-            iterator.next().keyReleased(e);
+            KeyListener listener = iterator.next();
+            if (e.getID() == KeyEvent.KEY_RELEASED) {
+                listener.keyReleased(e);
+            }
+            if (e.getID() == KeyEvent.KEY_PRESSED) {
+                listener.keyPressed(e);
+            }
+            if (e.getID() == KeyEvent.KEY_TYPED) {
+                listener.keyTyped(e);
+            }
         }
+        return false;
     }
 }

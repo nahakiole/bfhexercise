@@ -5,34 +5,51 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class Game extends JFrame implements KeyListener, Drawable {
+public class Game extends JFrame implements KeyListener, Drawable, Updateable {
 
     public boolean paused = false;
     public GameThread gameThread;
+    InputHandler inputHandler;
 
     public static void main(String[] args) {
         Game game = new Game();
     }
 
     Game() {
+        this.setFocusable(true);
         this.setSize(640, 480);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Screen screen = new Screen();
-        InputHandler inputHandler = new InputHandler();
+         inputHandler = new InputHandler();
         Player player = new Player(KeyEvent.VK_RIGHT,KeyEvent.VK_LEFT, KeyEvent.VK_UP, Color.RED);
         Player player2 = new Player(KeyEvent.VK_D,KeyEvent.VK_A, KeyEvent.VK_W, Color.BLUE);
+
+        Player[] players = {player,player2};
+       // Enemy enemy = new Enemy(players);
         Stage stage = new Stage();
+
         gameThread = new GameThread(screen);
         inputHandler.addKeyListener(player);
         inputHandler.addKeyListener(player2);
-        addKeyListener(inputHandler);
+
+        KeyboardFocusManager.getCurrentKeyboardFocusManager()
+                .addKeyEventPostProcessor(inputHandler);
+
+        CollisionHandler collisionHandler = new CollisionHandler();
+        collisionHandler.addCollidable(player);
+        collisionHandler.addCollidable(player2);
+
         screen.addDrawable(player);
         screen.addDrawable(player2);
         screen.addDrawable(stage);
+        //screen.addDrawable(enemy);
         screen.addDrawable(this);
         gameThread.addElement(player);
+        gameThread.addElement(collisionHandler);
         gameThread.addElement(player2);
+        //gameThread.addElement(enemy);
         gameThread.addElement(stage);
+        gameThread.addElement(this);
         this.add(screen);
         gameThread.start();
         this.setVisible(true);
@@ -62,6 +79,11 @@ public class Game extends JFrame implements KeyListener, Drawable {
         if (paused) {
             paramGraphics.drawString("Game paused", paramGraphics.getClipBounds().width / 2, paramGraphics.getClipBounds().height / 2);
         }
+
+    }
+
+    @Override
+    public void update(long time) {
 
     }
 }

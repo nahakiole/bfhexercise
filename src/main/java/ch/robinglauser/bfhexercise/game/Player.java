@@ -4,20 +4,22 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class Player implements Drawable, KeyListener, Updateable {
-    double acceleration = 0;
+public class Player implements Drawable, KeyListener, Updateable, Collidable {
 
-    Point position = new Point();
-
-    int jumping = 0;
-
-    boolean leftpressed = false;
-    boolean rightpressed = false;
+    public static final int jumpHeight = 20;
 
     private int VK_RIGHT;
     private int VK_LEFT;
     private int VK_JUMP;
     private Color color;
+
+    int jumping = 0;
+    boolean leftpressed = false;
+    boolean rightpressed = false;
+    double acceleration = 0;
+    double walkanimation = 0;
+
+    Point position = new Point();
 
     public Player(int VK_RIGHT, int VK_LEFT, int VK_JUMP, Color color) {
         this.VK_RIGHT = VK_RIGHT;
@@ -25,8 +27,6 @@ public class Player implements Drawable, KeyListener, Updateable {
         this.VK_JUMP = VK_JUMP;
         this.color = color;
     }
-
-    public static final int jumpHeight = 20;
 
 
     public Point[] getJump(int height) {
@@ -41,7 +41,18 @@ public class Player implements Drawable, KeyListener, Updateable {
     @Override
     public void draw(Graphics paramGraphics) {
         paramGraphics.setColor(color);
-        paramGraphics.fillRect((int) position.x, (int) ((int) position.y + paramGraphics.getClipBounds().getHeight() - (Stage.height + 20)), 20, 20);
+
+        paramGraphics.fillRect((int) (position.x + walkanimation), (int) ((int) position.y + paramGraphics.getClipBounds().getHeight() - (Stage.height + 20)), 5, 20);
+
+        paramGraphics.fillRect((int) (position.x + 10 - walkanimation), (int) ((int) position.y + paramGraphics.getClipBounds().getHeight() - (Stage.height + 20)), 5, 20);
+        paramGraphics.fillRect((int) position.x, (int) ((int) position.y + paramGraphics.getClipBounds().getHeight() - (Stage.height + 30)), 15, 20);
+
+        paramGraphics.fillOval((int) position.x, (int) ((int) position.y + paramGraphics.getClipBounds().getHeight() - (Stage.height + 45)), 15, 15);
+
+        paramGraphics.fillRect((int) position.x - 4, (int) ((int) position.y + paramGraphics.getClipBounds().getHeight() - (Stage.height + 30)), 20, 4);
+
+        paramGraphics.fillRect((int) position.x - 4, (int) ((int) position.y + paramGraphics.getClipBounds().getHeight() - (Stage.height + 30)), 3, 16);
+        paramGraphics.fillRect((int) position.x + 16, (int) ((int) position.y + paramGraphics.getClipBounds().getHeight() - (Stage.height + 30)), 3, 16);
     }
 
 
@@ -52,7 +63,6 @@ public class Player implements Drawable, KeyListener, Updateable {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println(e.getKeyCode());
         if (e.getKeyCode() == this.VK_RIGHT) {
             acceleration = 4;
             rightpressed = true;
@@ -75,9 +85,7 @@ public class Player implements Drawable, KeyListener, Updateable {
             if (!leftpressed) {
                 acceleration = 0;
             }
-
         }
-
         if (e.getKeyCode() == this.VK_LEFT) {
             leftpressed = false;
             if (!rightpressed) {
@@ -92,9 +100,29 @@ public class Player implements Drawable, KeyListener, Updateable {
         if (jumping > 0 && jumping - 1 < getJump(jumpHeight).length) {
             position.translate(getJump(jumpHeight)[jumping - 1].x, getJump(jumpHeight)[jumping - 1].y);
             jumping++;
+        } else {
+            if (acceleration != 0) {
+                walkanimation = (walkanimation + 0.4) % 6;
+            } else {
+                walkanimation = 0;
+            }
         }
         if (jumping - 1 == getJump(jumpHeight).length) {
             jumping = 0;
+        }
+
+    }
+
+    @Override
+    public Rectangle getBounds() {
+        return new Rectangle(position.x, position.y, 20, 50);
+    }
+
+    @Override
+    public void onCollide(Collidable collider) {
+        if (collider instanceof Player) {
+            Player player = (Player) collider;
+            player.color = new Color((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255));
         }
     }
 }
