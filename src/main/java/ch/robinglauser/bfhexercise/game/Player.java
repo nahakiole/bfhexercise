@@ -72,10 +72,6 @@ public class Player implements Drawable, KeyListener, Updateable, Collidable {
 
 
         if (punching) {
-            if (jumping > 0){
-
-            }
-            else {
                 //Arms
                 if (punchDirection){
                     paramGraphics.fillRect((int) position.x - 4 + ((int) walkanimation / 2), (int) ((int) position.y + paramGraphics.getClipBounds().getHeight() - (Stage.height + 30)), 3, 16);
@@ -85,7 +81,7 @@ public class Player implements Drawable, KeyListener, Updateable, Collidable {
                     paramGraphics.fillRect((int) position.x - 14 + ((int) walkanimation / 2), (int) ((int) position.y + paramGraphics.getClipBounds().getHeight() - (Stage.height + 30)), 14, 3);
                     paramGraphics.fillRect((int) position.x + 16 - ((int) walkanimation / 2), (int) ((int) position.y + paramGraphics.getClipBounds().getHeight() - (Stage.height + 30)), 3, 16);
                 }
-            }
+
 
         } else {
             //Arms
@@ -192,7 +188,16 @@ public class Player implements Drawable, KeyListener, Updateable, Collidable {
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle(position.x, position.y, 40, 60);
+        int width = 25;
+        int punchingcorreection = 0;
+        if (punching) {
+            width += 10;
+            if (!punchDirection){
+                punchingcorreection = -10;
+            }
+        }
+
+        return new Rectangle(position.x-5 + punchingcorreection, (position.y + 480 - (Stage.height + 100)), width, 60);
     }
 
     @Override
@@ -205,7 +210,6 @@ public class Player implements Drawable, KeyListener, Updateable, Collidable {
                     health = 0;
                 }
             }
-            //player.color = new Color((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255));
         }
     }
 }

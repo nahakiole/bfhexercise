@@ -42,7 +42,7 @@ public class Game extends JFrame implements KeyListener, Drawable, Updateable {
         screen.addDrawable(player);
         screen.addDrawable(player2);
         screen.addDrawable(stage);
-        //screen.addDrawable(enemy);
+        screen.addDrawable(collisionHandler);
         screen.addDrawable(this);
         gameThread.addElement(player);
         gameThread.addElement(collisionHandler);

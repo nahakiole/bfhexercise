@@ -1,9 +1,10 @@
 package ch.robinglauser.bfhexercise.game;
 
+import java.awt.*;
 import java.util.Iterator;
 import java.util.Vector;
 
-public class CollisionHandler implements Updateable {
+public class CollisionHandler implements Updateable, Drawable {
     private Vector<Collidable> collidables = new Vector<>();
 
     void addCollidable(Collidable collidable) {
@@ -24,4 +25,13 @@ public class CollisionHandler implements Updateable {
     }
 
 
+    @Override
+    public void draw(Graphics paramGraphics) {
+        for (Iterator<Collidable> iterator = collidables.iterator(); iterator.hasNext(); ) {
+            Collidable collidable = iterator.next();
+            Rectangle rectangle = collidable.getBounds();
+            paramGraphics.setColor(Color.RED);
+            paramGraphics.drawRect(rectangle.x,rectangle.y,rectangle.width, rectangle.height);
+        }
+    }
 }
