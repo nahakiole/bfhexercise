@@ -11,7 +11,7 @@ public class Stage implements Drawable, Updateable {
     }
 
     @Override
-    public void update(long time) {
+    public void update(double time) {
 
     }
 }

@@ -11,7 +11,7 @@ public class CollisionHandler implements Updateable {
     }
 
     @Override
-    public void update(long time) {
+    public void update(double time) {
         for (Iterator<Collidable> iterator = collidables.iterator(); iterator.hasNext(); ) {
             Collidable collidable = iterator.next();
             for (Iterator<Collidable> innerIterator = collidables.iterator(); innerIterator.hasNext(); ) {

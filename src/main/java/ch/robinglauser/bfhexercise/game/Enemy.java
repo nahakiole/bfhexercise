@@ -19,7 +19,7 @@ public class Enemy implements Drawable, Updateable  {
     }
 
     @Override
-    public void update(long time) {
+    public void update(double time) {
         Player player = players[0];
         if (players[0].position.distance(position) > players[1].position.distance(position)){
             player = players[1];

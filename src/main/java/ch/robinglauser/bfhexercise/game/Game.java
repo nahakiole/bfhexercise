@@ -21,8 +21,8 @@ public class Game extends JFrame implements KeyListener, Drawable, Updateable {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Screen screen = new Screen();
          inputHandler = new InputHandler();
-        Player player = new Player(KeyEvent.VK_RIGHT,KeyEvent.VK_LEFT, KeyEvent.VK_UP, Color.RED);
-        Player player2 = new Player(KeyEvent.VK_D,KeyEvent.VK_A, KeyEvent.VK_W, Color.BLUE);
+        Player player = new Player(KeyEvent.VK_RIGHT,KeyEvent.VK_LEFT, KeyEvent.VK_UP, Color.RED, 10, KeyEvent.VK_CONTROL);
+        Player player2 = new Player(KeyEvent.VK_D,KeyEvent.VK_A, KeyEvent.VK_W, Color.BLUE, 400, KeyEvent.VK_Q);
 
         Player[] players = {player,player2};
        // Enemy enemy = new Enemy(players);
@@ -83,7 +83,7 @@ public class Game extends JFrame implements KeyListener, Drawable, Updateable {
     }
 
     @Override
-    public void update(long time) {
+    public void update(double time) {
 
     }
 }

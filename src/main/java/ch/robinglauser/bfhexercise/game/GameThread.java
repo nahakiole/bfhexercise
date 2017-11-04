@@ -45,7 +45,7 @@ public class GameThread extends Thread {
             screen.repaint();
 
             for (Iterator<Updateable> iterator = elements.iterator(); iterator.hasNext(); ) {
-                iterator.next().update(now);
+                iterator.next().update(delta);
             }
 
             try {
