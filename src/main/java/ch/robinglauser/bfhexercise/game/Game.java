@@ -4,12 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Vector;
 
 public class Game extends JFrame implements KeyListener, Drawable, Updateable {
 
     public boolean paused = false;
     public GameThread gameThread;
     InputHandler inputHandler;
+    private Vector<Object> gameObjects = new Vector<>();
 
     public static void main(String[] args) {
         Game game = new Game();
@@ -23,31 +25,32 @@ public class Game extends JFrame implements KeyListener, Drawable, Updateable {
          inputHandler = new InputHandler();
         Player player = new Player(KeyEvent.VK_RIGHT,KeyEvent.VK_LEFT, KeyEvent.VK_UP, Color.RED, 10, KeyEvent.VK_CONTROL);
         Player player2 = new Player(KeyEvent.VK_D,KeyEvent.VK_A, KeyEvent.VK_W, Color.BLUE, 400, KeyEvent.VK_Q);
-
         Player[] players = {player,player2};
-       // Enemy enemy = new Enemy(players);
+        Enemy enemy = new Enemy(players);
         Stage stage = new Stage();
+
+
+
 
         gameThread = new GameThread(screen);
         inputHandler.addKeyListener(player);
         inputHandler.addKeyListener(player2);
-
         KeyboardFocusManager.getCurrentKeyboardFocusManager()
                 .addKeyEventPostProcessor(inputHandler);
-
         CollisionHandler collisionHandler = new CollisionHandler();
         collisionHandler.addCollidable(player);
         collisionHandler.addCollidable(player2);
-
+        collisionHandler.addCollidable(enemy);
         screen.addDrawable(player);
         screen.addDrawable(player2);
+        screen.addDrawable(enemy);
         screen.addDrawable(stage);
         screen.addDrawable(collisionHandler);
         screen.addDrawable(this);
         gameThread.addElement(player);
         gameThread.addElement(collisionHandler);
         gameThread.addElement(player2);
-        //gameThread.addElement(enemy);
+        gameThread.addElement(enemy);
         gameThread.addElement(stage);
         gameThread.addElement(this);
         this.add(screen);
