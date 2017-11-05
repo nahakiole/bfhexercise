@@ -27,11 +27,8 @@ public class Game extends JFrame implements KeyListener, Drawable, Updateable {
         Player player2 = new Player(KeyEvent.VK_D,KeyEvent.VK_A, KeyEvent.VK_W, Color.BLUE, 400, KeyEvent.VK_Q);
         Player[] players = {player,player2};
         Enemy enemy = new Enemy(players);
+        Enemy enemy2 = new Enemy(players);
         Stage stage = new Stage();
-
-
-
-
         gameThread = new GameThread(screen);
         inputHandler.addKeyListener(player);
         inputHandler.addKeyListener(player2);
@@ -41,9 +38,11 @@ public class Game extends JFrame implements KeyListener, Drawable, Updateable {
         collisionHandler.addCollidable(player);
         collisionHandler.addCollidable(player2);
         collisionHandler.addCollidable(enemy);
+        collisionHandler.addCollidable(enemy2);
         screen.addDrawable(player);
         screen.addDrawable(player2);
         screen.addDrawable(enemy);
+        screen.addDrawable(enemy2);
         screen.addDrawable(stage);
         screen.addDrawable(collisionHandler);
         screen.addDrawable(this);
@@ -51,6 +50,7 @@ public class Game extends JFrame implements KeyListener, Drawable, Updateable {
         gameThread.addElement(collisionHandler);
         gameThread.addElement(player2);
         gameThread.addElement(enemy);
+        gameThread.addElement(enemy2);
         gameThread.addElement(stage);
         gameThread.addElement(this);
         this.add(screen);
