@@ -5,7 +5,7 @@ import project9.interfaces.Stream;
 
 import java.util.Arrays;
 
-public class ArrayStreamTest {
+public class ArrayStreamUsage {
 
     public static void main(String[] args) {
         ArrayStream<Integer> arrayStream = new ArrayStream<>(1, 4, 1, 3, 4, 1, 4, 12, 1, 2);
