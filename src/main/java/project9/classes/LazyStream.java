@@ -90,7 +90,16 @@ public abstract class LazyStream<E> implements Stream<E> {
 
     @Override
     public E reduce(Operator<E> operator) {
-        return null;
+        Iterator<E> iterator = iterator();
+        E result = null;
+        if (iterator.hasNext()) {
+            result = iterator.next();
+            while (iterator.hasNext()) {
+                E element = iterator.next();
+                result = operator.apply(element, result);
+            }
+        }
+        return result;
     }
 
     @Override
@@ -153,8 +162,7 @@ public abstract class LazyStream<E> implements Stream<E> {
 
                     @Override
                     public boolean hasNext() {
-                        while (i < skip) {
-                            i++;
+                        while (i < skip && innerIterator.hasNext()) {
                             next();
                         }
                         return innerIterator.hasNext();
