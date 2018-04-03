@@ -1,7 +1,7 @@
 package project9.tests;
 
 import project9.classes.ArrayStream;
-import project9.classes.SeededStream;
+import project9.interfaces.Stream;
 
 import java.util.Arrays;
 
@@ -14,13 +14,15 @@ public class ArrayStreamTest {
         System.out.println(arrayStream.reduce((x, y) -> x + y));
         System.out.println(arrayStream.filter(x -> x > 10).countAll());
 
-        SeededStream<Integer> seededStream = new SeededStream<>(1, x -> x * 2, x -> x < 50);
-        System.out.println(seededStream.countAll());
-        System.out.println(Arrays.toString(seededStream.toList().toArray()));
 
         ArrayStream<String> stringArrayStream = new ArrayStream<>("Bob", "Alice", "Eve", "Fred", "Markus");
+        System.out.println(Arrays.toString(stringArrayStream.toList().toArray()));
         System.out.println(Arrays.toString(stringArrayStream.filter(x -> x.matches(".*e.*")).toList().toArray()));
+        System.out.println(Arrays.toString(stringArrayStream.filter(x -> x.matches("A.*")).toList().toArray()));
+        System.out.println(Arrays.toString(stringArrayStream.map(String::length).toList().toArray()));
 
+        Stream<Integer> a = stringArrayStream.filter(x -> x.matches(".*e.*")).map(String::length);
+        System.out.println(Arrays.toString(a.toList().toArray()));
     }
 
 }
