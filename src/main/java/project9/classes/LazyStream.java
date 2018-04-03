@@ -19,9 +19,7 @@ public abstract class LazyStream<E> implements Stream<E> {
      */
     @Override
     public boolean matchAll(Predicate<? super E> predicate) {
-        Iterator<E> iterator = iterator();
-        while (iterator.hasNext()) {
-            E element = iterator.next();
+        for (E element : this) {
             if (!predicate.test(element)) {
                 return false;
             }
@@ -37,9 +35,7 @@ public abstract class LazyStream<E> implements Stream<E> {
      */
     @Override
     public boolean matchAny(Predicate<? super E> predicate) {
-        Iterator<E> iterator = iterator();
-        while (iterator.hasNext()) {
-            E element = iterator.next();
+        for (E element : this) {
             if (predicate.test(element)) {
                 return true;
             }
@@ -54,10 +50,8 @@ public abstract class LazyStream<E> implements Stream<E> {
      */
     @Override
     public int countAll() {
-        Iterator<E> iterator = iterator();
         int count = 0;
-        while (iterator.hasNext()) {
-            E element = iterator.next();
+        for (E element : this) {
             if (element != null) {
                 count++;
             }
@@ -73,10 +67,8 @@ public abstract class LazyStream<E> implements Stream<E> {
      */
     @Override
     public int count(Predicate<? super E> predicate) {
-        Iterator<E> iterator = iterator();
         int count = 0;
-        while (iterator.hasNext()) {
-            E element = iterator.next();
+        for (E element : this) {
             if (predicate.test(element)) {
                 count++;
             }
@@ -114,9 +106,7 @@ public abstract class LazyStream<E> implements Stream<E> {
      */
     @Override
     public E find(Predicate<? super E> predicate) {
-        Iterator<E> iterator = iterator();
-        while (iterator.hasNext()) {
-            E element = iterator.next();
+        for (E element : this) {
             if (predicate.test(element)) {
                 return element;
             }
@@ -132,8 +122,8 @@ public abstract class LazyStream<E> implements Stream<E> {
      */
     @Override
     public E reduce(Operator<E> operator) {
-        Iterator<E> iterator = iterator();
         E result = null;
+        Iterator<E> iterator = iterator();
         if (iterator.hasNext()) {
             result = iterator.next();
             while (iterator.hasNext()) {
@@ -152,9 +142,7 @@ public abstract class LazyStream<E> implements Stream<E> {
     @Override
     public List<E> toList() {
         ArrayList<E> elementList = new ArrayList<>();
-        Iterator<E> iterator = iterator();
-        while (iterator.hasNext()) {
-            E element = iterator.next();
+        for (E element : this) {
             if (element != null) {
                 elementList.add(element);
             }
@@ -300,7 +288,7 @@ public abstract class LazyStream<E> implements Stream<E> {
                     @Override
                     public F next() {
                         E element = innerIterator.next();
-                        if (element == null){
+                        if (element == null) {
                             return null;
                         }
                         return mapping.apply(element);
