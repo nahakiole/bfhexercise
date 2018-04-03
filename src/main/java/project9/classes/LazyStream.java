@@ -279,6 +279,7 @@ public abstract class LazyStream<E> implements Stream<E> {
 
     /**
      * Create new stream with other type of element by transformation
+     *
      * @param mapping Transformation method
      * @return Mapped stream
      */
@@ -298,7 +299,11 @@ public abstract class LazyStream<E> implements Stream<E> {
 
                     @Override
                     public F next() {
-                        return mapping.apply(innerIterator.next());
+                        E element = innerIterator.next();
+                        if (element == null){
+                            return null;
+                        }
+                        return mapping.apply(element);
                     }
                 };
             }
