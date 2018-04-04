@@ -49,6 +49,7 @@ public class SeededStream<E> extends LazyStream<E> {
 
     /**
      * Creates iterator for ArrayStream
+     *
      * @return iterator
      */
     @Override

@@ -14,6 +14,7 @@ public class ArrayStream<E> extends LazyStream<E> {
 
     /**
      * Create ArrayStream from string array.
+     *
      * @param array
      */
     public ArrayStream(E... array) {
@@ -22,6 +23,7 @@ public class ArrayStream<E> extends LazyStream<E> {
 
     /**
      * Creates iterator for ArrayStream
+     *
      * @return iterator
      */
     @Override
