@@ -52,9 +52,7 @@ public abstract class LazyStream<E> implements Stream<E> {
     public int countAll() {
         int count = 0;
         for (E element : this) {
-            if (element != null) {
-                count++;
-            }
+            count++;
         }
         return count;
     }
@@ -143,9 +141,7 @@ public abstract class LazyStream<E> implements Stream<E> {
     public List<E> toList() {
         ArrayList<E> elementList = new ArrayList<>();
         for (E element : this) {
-            if (element != null) {
-                elementList.add(element);
-            }
+            elementList.add(element);
         }
         return elementList;
     }
@@ -244,19 +240,31 @@ public abstract class LazyStream<E> implements Stream<E> {
                 return new Iterator<E>() {
                     Iterator<E> innerIterator = lazyStream.iterator();
 
+                    E nextElement = null;
+                    E currentElement = null;
+
                     @Override
                     public boolean hasNext() {
-                        return innerIterator.hasNext();
+                        if (nextElement != null){
+                            if (predicate.test(nextElement)){
+                                return true;
+                            }
+                        }
+                        while (innerIterator.hasNext()){
+                            nextElement = innerIterator.next();
+                            if (predicate.test(nextElement)){
+                                return true;
+                            }
+                        }
+                        return false;
                     }
 
                     @Override
                     public E next() {
-                        E element;
-                        while (hasNext()) {
-                            element = innerIterator.next();
-                            if (predicate.test(element)) {
-                                return element;
-                            }
+                        if (hasNext()){
+                            currentElement = nextElement;
+                            nextElement = null;
+                            return currentElement;
                         }
                         return null;
                     }
