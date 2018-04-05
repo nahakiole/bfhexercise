@@ -13,7 +13,7 @@ public class ArrayStreamUsage {
 
         System.out.println(Arrays.toString(arrayStream.filter(x -> x > 5).toList().toArray()));
 
-        System.out.println(Arrays.toString(arrayStream.map(x -> x > 5).toList().toArray()));
+        System.out.println(Arrays.toString(arrayStream.map(x -> x*2).toList().toArray()));
 
         System.out.println(arrayStream.reduce((x, y) -> x + y));
 

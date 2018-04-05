@@ -22,10 +22,17 @@ public class SeededStreamUsage {
         System.out.println(Arrays.toString(seededStream.toList().toArray()));
 
 
-        SeededStream<Rectangle> rectangleSeededStream = new SeededStream<>(new Rectangle(1, 1), x -> new Rectangle(x.width *2 , x.height * 2), x -> x.height < 100);
+        SeededStream<Rectangle> rectangleSeededStream = new SeededStream<>(
+                new Rectangle((int) (Math.random() * 8)+2, (int) (Math.random() * 8)+2),
+                x -> new Rectangle(
+                        (int) (x.width + Math.random() * 4) + 2,
+                        (int) (x.height + Math.random() * 4) + 2),
+                x -> x.height < 100);
 
-        System.out.println(rectangleSeededStream.map(x -> "[height: " + x.height + " width: " + x.width + "]\n")
-                .reduce((x, y) -> y+x));
+        System.out.println(rectangleSeededStream
+                .filter(x -> x.height % 2 == 0 && x.width % 2 == 0)
+                .map(x -> "[height: " + x.height + " width: " + x.width + "]\n")
+                .reduce((x, y) -> y + x));
 
     }
 }
