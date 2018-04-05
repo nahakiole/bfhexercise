@@ -10,6 +10,10 @@ import javafx.stage.Stage;
 import javafx.scene.control.TextField;
 import project9.classes.ArrayStream;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 public class ArrayStreamApplication extends Application {
 
     @Override
@@ -17,20 +21,24 @@ public class ArrayStreamApplication extends Application {
         BorderPane root = new BorderPane();
         TextField textField = new TextField();
 
-        ArrayStream<String> arrayStream = new ArrayStream<>("Fred", "Eve", "Alice", "Bob", "Berta", "Bobin", "Hans", "Bob");
+        ArrayStream<Person> arrayStream = new ArrayStream<>(
+                new Person("Bob", "Meier", "Thun"),
+                new Person("Fred", "Muster", "Bern"),
+                new Person("Eve", "Meier", "Biel")
+        );
 
         root.setTop(textField);
 
-        ListView<String> list = new ListView<String>();
-        ObservableList<String> items = FXCollections.observableArrayList(arrayStream.toList());
+        ListView<String> list = new ListView<>();
+        ObservableList<String> items = FXCollections.observableArrayList(arrayStream.map(Object::toString).toList());
         list.setItems(items);
 
         root.setCenter(list);
 
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
             items.setAll(arrayStream.filter(item -> {
-                return item.contains(textField.getText());
-            }).toList());
+                return item.toString().contains(textField.getText());
+            }).map(Object::toString).toList());
         });
 
         Scene scene = new Scene(root);
