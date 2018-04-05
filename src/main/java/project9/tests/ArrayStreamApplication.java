@@ -35,7 +35,7 @@ public class ArrayStreamApplication extends Application {
 
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Kock Kurve");
+        primaryStage.setTitle("ArrayStreamApplication");
         primaryStage.show();
     }
 
