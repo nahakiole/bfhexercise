@@ -15,10 +15,23 @@ public class ArrayStream<E> extends LazyStream<E> {
     /**
      * Create ArrayStream from string array.
      *
-     * @param array
+     * @param array Initial array
      */
     public ArrayStream(E... array) {
         elements.addAll(Arrays.asList(array));
+    }
+
+
+    /**
+     * Get element with index from stream.
+     *
+     * @param index Index of element
+     * @return Element at index
+     * @throws IndexOutOfBoundsException
+     */
+    @Override
+    public E get(int index) throws IndexOutOfBoundsException {
+        return elements.get(index);
     }
 
     /**
