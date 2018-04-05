@@ -27,7 +27,8 @@ public class ArrayStream<E> extends LazyStream<E> {
      *
      * @param index Index of element
      * @return Element at index
-     * @throws IndexOutOfBoundsException
+     *
+     * @throws IndexOutOfBoundsException if the index is out of range
      */
     @Override
     public E get(int index) throws IndexOutOfBoundsException {
