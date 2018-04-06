@@ -1,17 +1,23 @@
 package project9.tests;
 
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+
 public class Candidate {
 
     private String firstName;
     private String lastName;
     private String city;
     private Integer votes;
+    private GregorianCalendar birthdate;
+    private static SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
-    public Candidate(String firstName, String lastName, String city, Integer votes) {
+    public Candidate(String firstName, String lastName, String city, Integer votes, GregorianCalendar birthdate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.city = city;
         this.votes = votes;
+        this.birthdate = birthdate;
     }
 
     public String getFirstName() {
@@ -41,7 +47,8 @@ public class Candidate {
 
     @Override
     public String toString() {
-        return firstName + ' ' + lastName + "," + city + "," + votes;
+        format.setCalendar(birthdate);
+        return firstName + ' ' + lastName + ", " + city + ", " + votes + ", " + format.format(birthdate.getTime());
     }
 
     public Integer getVotes() {

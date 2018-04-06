@@ -5,58 +5,123 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.scene.control.TextField;
 import project9.classes.ArrayStream;
+import project9.classes.SeededStream;
 import project9.interfaces.Stream;
 
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Random;
+
 public class ArrayStreamApplication extends Application {
+    ObservableList<String> items;
+    Label sum;
+
+    ArrayStream<Candidate> arrayStream;
+    TextField textField;
+
+    String[] firstNames = {
+            "Bob",
+            "Pascal",
+            "Carole",
+            "Cynthia",
+            "Nora",
+            "Fred",
+            "Geraldine",
+            "Eve",
+            "Petra",
+            "Hans",
+    };
+
+    String[] lastNames = {
+            "Meier",
+            "Kunz",
+            "Muster",
+            "Müller",
+            "Kurz",
+            "Lang",
+            "Ferdinand",
+    };
+
+    String[] cities = {
+            "Bern",
+            "Biel",
+            "Interlaken",
+            "Thun"
+    };
 
     @Override
     public void start(Stage primaryStage) {
         BorderPane root = new BorderPane();
-        TextField textField = new TextField();
 
-        ArrayStream<Candidate> arrayStream = new ArrayStream<>(
-                new Candidate("Bob", "Meier", "Thun", 10),
-                new Candidate("Pascal", "Schütz", "Thun", 10),
-                new Candidate("Fred", "Muster", "Bern", 20),
-                new Candidate("Hans", "Zug", "Bern", 30),
-                new Candidate("Eve", "Meier", "Biel", 15)
+        textField = new TextField();
+
+        SeededStream<Candidate> candidates = new SeededStream<Candidate>(generateCandidate(), x -> generateCandidate());
+
+        List<Candidate> candidateArrayList = candidates.limit(20).toList();
+
+        arrayStream = new ArrayStream<>(
+                (Candidate[]) candidateArrayList.toArray(new Candidate[candidateArrayList.size()])
         );
 
         root.setTop(textField);
 
         ListView<String> list = new ListView<>();
-        ObservableList<String> items = FXCollections.observableArrayList(arrayStream.map(Object::toString).toList());
+
+        items = FXCollections.observableArrayList(arrayStream.map(Object::toString).toList());
         list.setItems(items);
 
         root.setCenter(list);
 
-        Label sum = new Label();
-        sum.setAlignment(Pos.CENTER);
-        sum.setText(String.valueOf(arrayStream.filter(item -> {
-            return item.toString().toLowerCase().contains(textField.getText().toLowerCase());
-        }).map(Candidate::getVotes).reduce((x, y) -> x + y)));
+        sum = new Label();
+        sum.setAlignment(Pos.BOTTOM_CENTER);
 
-        root.setBottom(sum);
+        HBox controls = new HBox(20);
+
+        Button button = new Button("Neuer Kandidat");
+
+        controls.getChildren().addAll(sum, button);
+        button.setOnAction(event -> {
+            arrayStream.getElements().add(generateCandidate());
+            updateList();
+        });
+
+        updateList();
+
+        root.setBottom(controls);
 
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            Stream<Candidate> candidates = arrayStream.filter(item -> {
-                return item.toString().toLowerCase().contains(textField.getText().toLowerCase());
-            });
-
-            items.setAll(candidates.map(Object::toString).toList());
-            sum.setText(String.valueOf(candidates.map(Candidate::getVotes).reduce((x, y) -> x + y)));
+            updateList();
         });
 
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setTitle("ArrayStreamApplication");
         primaryStage.show();
+    }
+
+    public Candidate generateCandidate() {
+        String firstName = firstNames[(new Random()).nextInt(firstNames.length)];
+        String lastName = lastNames[(new Random()).nextInt(lastNames.length)];
+        String city = cities[(new Random()).nextInt(cities.length)];
+
+        return new Candidate(firstName, lastName, city, new Random().nextInt(30), new GregorianCalendar(new Random().nextInt(50) + 1950, new Random().nextInt(11), new Random().nextInt(30)));
+    }
+
+    public void updateList() {
+        Stream<Candidate> candidates = arrayStream.filter(item -> {
+            return item.toString().toLowerCase().contains(textField.getText().toLowerCase());
+        });
+
+        items.setAll(candidates.map(Object::toString).toList());
+        sum.setText(String.valueOf(candidates.map(Candidate::getVotes).reduce((x, y) -> x + y)));
     }
 
 
