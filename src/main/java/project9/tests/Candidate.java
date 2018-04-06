@@ -1,15 +1,17 @@
 package project9.tests;
 
-public class Person {
+public class Candidate {
 
     private String firstName;
     private String lastName;
     private String city;
+    private Integer votes;
 
-    public Person(String firstName, String lastName, String city) {
+    public Candidate(String firstName, String lastName, String city, Integer votes) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.city = city;
+        this.votes = votes;
     }
 
     public String getFirstName() {
@@ -39,6 +41,14 @@ public class Person {
 
     @Override
     public String toString() {
-        return firstName + ' ' + lastName + "," + city;
+        return firstName + ' ' + lastName + "," + city + "," + votes;
+    }
+
+    public Integer getVotes() {
+        return votes;
+    }
+
+    public void setVotes(Integer votes) {
+        this.votes = votes;
     }
 }
