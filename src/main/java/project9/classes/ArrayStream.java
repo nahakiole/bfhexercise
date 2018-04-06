@@ -1,9 +1,6 @@
 package project9.classes;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 
 public class ArrayStream<E> extends LazyStream<E> {
 
@@ -21,6 +18,9 @@ public class ArrayStream<E> extends LazyStream<E> {
         elements.addAll(Arrays.asList(array));
     }
 
+    public ArrayList<E> getElements() {
+        return elements;
+    }
 
     /**
      * Get element with index from stream.
