@@ -16,18 +16,19 @@ import project9.classes.ArrayStream;
 import project9.classes.SeededStream;
 import project9.interfaces.Stream;
 
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 
-public class ArrayStreamApplication extends Application {
-    ObservableList<String> items;
-    Label sum;
+public class StreamApplication extends Application {
+    private ObservableList<String> items;
+    private Label sum;
 
-    ArrayStream<Candidate> arrayStream;
-    TextField textField;
+    private ArrayStream<Candidate> arrayStream;
+    private TextField textField;
 
-    String[] firstNames = {
+    private String[] firstNames = {
             "Bob",
             "Pascal",
             "Carole",
@@ -40,7 +41,7 @@ public class ArrayStreamApplication extends Application {
             "Hans",
     };
 
-    String[] lastNames = {
+    private String[] lastNames = {
             "Meier",
             "Kunz",
             "Muster",
@@ -50,7 +51,7 @@ public class ArrayStreamApplication extends Application {
             "Ferdinand",
     };
 
-    String[] cities = {
+    private String[] cities = {
             "Bern",
             "Biel",
             "Interlaken",
@@ -63,9 +64,9 @@ public class ArrayStreamApplication extends Application {
 
         textField = new TextField();
 
-        SeededStream<Candidate> candidates = new SeededStream<Candidate>(generateCandidate(), x -> generateCandidate());
+        SeededStream<Candidate> candidates = new SeededStream<>(generateCandidate(), x -> generateCandidate());
 
-        List<Candidate> candidateArrayList = candidates.limit(20).toList();
+        List<Candidate> candidateArrayList = candidates.filter(x -> x.getVotes() > 10).limit(10).toList();
 
         arrayStream = new ArrayStream<>(
                 (Candidate[]) candidateArrayList.toArray(new Candidate[candidateArrayList.size()])
@@ -103,19 +104,19 @@ public class ArrayStreamApplication extends Application {
 
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("ArrayStreamApplication");
+        primaryStage.setTitle("StreamApplication");
         primaryStage.show();
     }
 
-    public Candidate generateCandidate() {
+    private Candidate generateCandidate() {
         String firstName = firstNames[(new Random()).nextInt(firstNames.length)];
         String lastName = lastNames[(new Random()).nextInt(lastNames.length)];
         String city = cities[(new Random()).nextInt(cities.length)];
 
-        return new Candidate(firstName, lastName, city, new Random().nextInt(30), new GregorianCalendar(new Random().nextInt(50) + 1950, new Random().nextInt(11), new Random().nextInt(30)));
+        return new Candidate(firstName, lastName, city, new Random().nextInt(200), new GregorianCalendar(new Random().nextInt(50) + 1950, new Random().nextInt(11), new Random().nextInt(30)));
     }
 
-    public void updateList() {
+    private void updateList() {
         Stream<Candidate> candidates = arrayStream.filter(item -> {
             return item.toString().toLowerCase().contains(textField.getText().toLowerCase());
         });
