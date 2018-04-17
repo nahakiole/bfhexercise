@@ -45,7 +45,7 @@ public interface Stream<E> extends Iterable<E> {
      *
      * @param index Index of element
      * @return Element at index
-     * @throws IndexOutOfBoundsException
+     * @throws IndexOutOfBoundsException When invalid index is passed
      */
     public E get(int index) throws IndexOutOfBoundsException;
 
@@ -77,7 +77,7 @@ public interface Stream<E> extends Iterable<E> {
      *
      * @param n Upper limit
      * @return Stream with limited elements
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException When limit is negative
      */
     public Stream<E> limit(int n) throws IllegalArgumentException;
 
@@ -86,7 +86,7 @@ public interface Stream<E> extends Iterable<E> {
      *
      * @param n lower limit
      * @return Stream with limited elements
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException When limit is negative
      */
     public Stream<E> skip(int n) throws IllegalArgumentException;
 
@@ -102,6 +102,7 @@ public interface Stream<E> extends Iterable<E> {
      * Create new stream with other type of element by transformation
      *
      * @param mapping Transformation method
+     * @param <F> New element type
      * @return Mapped stream
      */
     public <F> Stream<F> map(Mapping<? super E, ? extends F> mapping);

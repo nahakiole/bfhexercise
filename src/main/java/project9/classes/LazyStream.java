@@ -79,7 +79,7 @@ public abstract class LazyStream<E> implements Stream<E> {
      *
      * @param index Index of element
      * @return Element at index
-     * @throws IndexOutOfBoundsException
+     * @throws IndexOutOfBoundsException When invalid index is passed
      */
     @Override
     public E get(int index) throws IndexOutOfBoundsException {
@@ -151,7 +151,7 @@ public abstract class LazyStream<E> implements Stream<E> {
      *
      * @param n Upper limit
      * @return Stream with limited elements
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException When limit is negative
      */
     @Override
     public Stream<E> limit(int n) throws IllegalArgumentException {
@@ -191,7 +191,7 @@ public abstract class LazyStream<E> implements Stream<E> {
      *
      * @param n lower limit
      * @return Stream with limited elements
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException When limit is negative
      */
     @Override
     public Stream<E> skip(int n) throws IllegalArgumentException {
@@ -245,14 +245,14 @@ public abstract class LazyStream<E> implements Stream<E> {
 
                     @Override
                     public boolean hasNext() {
-                        if (nextElement != null){
-                            if (predicate.test(nextElement)){
+                        if (nextElement != null) {
+                            if (predicate.test(nextElement)) {
                                 return true;
                             }
                         }
-                        while (innerIterator.hasNext()){
+                        while (innerIterator.hasNext()) {
                             nextElement = innerIterator.next();
-                            if (predicate.test(nextElement)){
+                            if (predicate.test(nextElement)) {
                                 return true;
                             }
                         }
@@ -261,7 +261,7 @@ public abstract class LazyStream<E> implements Stream<E> {
 
                     @Override
                     public E next() {
-                        if (hasNext()){
+                        if (hasNext()) {
                             currentElement = nextElement;
                             nextElement = null;
                             return currentElement;
@@ -277,6 +277,7 @@ public abstract class LazyStream<E> implements Stream<E> {
      * Create new stream with other type of element by transformation
      *
      * @param mapping Transformation method
+     * @param <F>     New element type
      * @return Mapped stream
      */
     @Override
